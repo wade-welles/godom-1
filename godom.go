@@ -4,34 +4,18 @@ import (
 	"fmt"
 	"sync"
 	"syscall/js"
-	"time"
 )
 
 var global = js.Global()
 var window = global.Get("window")
 var screen = global.Get("screen")
 var document = global.Get("document")
-var root *Elem
+
 var store = make(map[string][]js.Value)
 var storeMu sync.Mutex
 
 var txtStore []js.Value
 var txtStoreMu sync.Mutex
-
-func init() {
-	t := time.NewTicker(time.Second * 5)
-	go func() {
-		for {
-			<-t.C
-			LogGroup("element store counts")
-			for k := range store {
-				LogDebug(k, "elements:", len(store[k]))
-			}
-			LogDebug("text elements:", len(txtStore))
-			LogGroupEnd()
-		}
-	}()
-}
 
 // Root .
 func Root(selector string) *Elem {
@@ -39,10 +23,9 @@ func Root(selector string) *Elem {
 	if !val.Truthy() {
 		return nil
 	}
-	root = &Elem{
+	return &Elem{
 		val: val,
 	}
-	return root
 }
 
 // Mount .
@@ -50,11 +33,6 @@ func Mount(u Renderer, e *Elem) {
 	e.components = append(e.components, u)
 	u.init()
 	u.Render(e)
-}
-
-// StaticComponent .
-func StaticComponent(elem *Elem) Renderer {
-	return &ElemComponent{elem: elem}
 }
 
 // Window .

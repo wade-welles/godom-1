@@ -78,8 +78,8 @@ func (r *Router) Mount(outlet *Elem) {
 						break
 					}
 				}
-				if !matched {
-					go Mount(r.notFoundRenderer(), outlet) // go ?
+				if !matched && r.notFoundRenderer != nil {
+					Mount(r.notFoundRenderer(), outlet) // go ?
 				}
 			case <-r.Quit:
 				window.ClearPopStateListener()
@@ -109,10 +109,7 @@ func NewRouter() *Router {
 	return &Router{
 		routes:   nil,
 		newRoute: make(chan string),
-		notFoundRenderer: func() Renderer {
-			return StaticComponent(Create("p").Text("Page not found"))
-		},
-		Quit: make(chan int),
+		Quit:     make(chan int),
 	}
 }
 
