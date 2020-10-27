@@ -79,7 +79,7 @@ func (r *Router) Mount(outlet *Elem) {
 					}
 				}
 				if !matched && r.notFoundRenderer != nil {
-					Mount(r.notFoundRenderer(), outlet) // go ?
+					Mount(r.notFoundRenderer(), outlet)
 				}
 			case <-r.Quit:
 				window.ClearPopStateListener()

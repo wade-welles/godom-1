@@ -8,6 +8,8 @@ For full documentation see [pkg.go.dev](https://pkg.go.dev/github.com/twharmon/g
 
 ## Getting Started
 
+### Basic Usage
+
 ```go
 package main
 
@@ -53,6 +55,9 @@ func (c *clicker) Render(root *godom.Elem) {
 	}()
 }
 ```
+
+### Template
+See [basic template](https://pkg.go.dev/github.com/twharmon/godom-template) for more.
 
 ## Contribute
 
