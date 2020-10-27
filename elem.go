@@ -11,7 +11,7 @@ type Elem struct {
 	name              string
 	val               js.Value
 	children          []*Elem
-	component         Renderer
+	components        []Renderer
 	clickListener     js.Func
 	inputListener     js.Func
 	keydownListener   js.Func
@@ -22,10 +22,10 @@ type Elem struct {
 
 // Clear .
 func (e *Elem) Clear() {
-	for e.component != nil {
-		e.component.unmount()
-		e.component = nil
+	for _, c := range e.components {
+		c.unmount()
 	}
+	e.components = nil
 	for _, child := range e.children {
 		e.removeChild(child)
 		child.Clear()
@@ -47,6 +47,15 @@ func (c *Component) HTTP(method string, url string, body io.Reader) *HTTPRequest
 	r.url = url
 	r.body = body
 	return r
+}
+
+// WS .
+func (c *Component) WS(url string) *WebSocket {
+	conn := global.Get("WebSocket").New(url)
+	ws := &WebSocket{
+		conn: conn,
+	}
+	return ws
 }
 
 func (c *Component) init() {

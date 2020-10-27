@@ -47,8 +47,7 @@ func Root(selector string) *Elem {
 
 // Mount .
 func Mount(u Renderer, e *Elem) {
-	e.Clear()
-	e.component = u
+	e.components = append(e.components, u)
 	u.init()
 	u.Render(e)
 }
