@@ -57,7 +57,7 @@ func (c *clicker) Render(root *godom.Elem) {
 ```
 
 ### Template
-See [basic template](https://pkg.go.dev/github.com/twharmon/godom-template) for more.
+See [basic template](https://github.com/twharmon/godom-template) for more.
 
 ## Contribute
 
