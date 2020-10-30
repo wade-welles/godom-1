@@ -10,7 +10,7 @@ import (
 type HTTPRequest struct {
 	method    string
 	url       string
-	component *Component
+	component *BaseComponent
 	body      io.Reader
 	header    http.Header
 }

@@ -19,12 +19,12 @@ import (
 
 func main() {
 	clicker := newClicker()
-	godom.Mount(clicker, godom.Root("#root"))
+	godom.Root("#root").Append(clicker)
 	<-clicker.Quit
 }
 
 type clicker struct {
-	godom.Component
+	godom.BaseComponent
 	clicked int
 }
 
@@ -32,10 +32,11 @@ func newClicker() *clicker {
 	return &clicker{}
 }
 
-func (c *clicker) Render(root *godom.Elem) {
+func (c *clicker) Render() *godom.Elem {
 	p := godom.Create("p").Text(c.clicked)
 	btn := godom.Create("button").Text("increment")
-	root.AppendElem(p, btn)
+    root := godom.Create("div")
+    root.Appen(btn, p)
 
 	ch := make(chan int)
 	btn.OnClick(func(e *godom.MouseEvent) {
@@ -52,7 +53,9 @@ func (c *clicker) Render(root *godom.Elem) {
 				return
 			}
 		}
-	}()
+    }()
+    
+    return root
 }
 ```
 

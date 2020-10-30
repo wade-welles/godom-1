@@ -28,11 +28,24 @@ func Root(selector string) *Elem {
 	}
 }
 
-// Mount .
-func Mount(u Renderer, e *Elem) {
-	e.components = append(e.components, u)
-	u.init()
-	u.Render(e)
+// Renderer .
+type Renderer interface {
+	Render() *Elem
+}
+
+// Append .
+func (e *Elem) Append(renderers ...Renderer) *Elem {
+	for _, renderer := range renderers {
+		componentRenderer, ok := renderer.(Component)
+		if ok {
+			e.components = append(e.components, componentRenderer)
+			componentRenderer.init()
+			e.appendElem(componentRenderer.Render())
+		} else {
+			e.appendElem(renderer.Render())
+		}
+	}
+	return e
 }
 
 // Window .

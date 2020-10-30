@@ -17,7 +17,7 @@ type Route struct {
 // Router .
 type Router struct {
 	routes           []*Route
-	notFoundRenderer func() Renderer
+	notFoundRenderer func() Component
 	route            string
 	newRoute         chan string
 	Quit             chan int
@@ -32,7 +32,7 @@ type param struct {
 type RouteParams []param
 
 // RouteRenderer .
-type RouteRenderer func(ps RouteParams) Renderer
+type RouteRenderer func(ps RouteParams) Component
 
 // Get .
 func (ps RouteParams) Get(key string) string {
@@ -73,13 +73,13 @@ func (r *Router) Mount(outlet *Elem) {
 								value: matches[0][i],
 							})
 						}
-						Mount(route.Renderer(ps), outlet)
+						outlet.Append(route.Renderer(ps))
 						matched = true
 						break
 					}
 				}
 				if !matched && r.notFoundRenderer != nil {
-					Mount(r.notFoundRenderer(), outlet)
+					outlet.Append(r.notFoundRenderer())
 				}
 			case <-r.Quit:
 				window.ClearPopStateListener()
@@ -98,7 +98,7 @@ func (r *Router) Mount(outlet *Elem) {
 }
 
 // NotFound .
-func (r *Router) NotFound(renderer func() Renderer) {
+func (r *Router) NotFound(renderer func() Component) {
 	r.notFoundRenderer = renderer
 }
 

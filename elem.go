@@ -10,7 +10,7 @@ type Elem struct {
 	name              string
 	val               js.Value
 	children          []*Elem
-	components        []Renderer
+	components        []Component
 	clickListener     js.Func
 	inputListener     js.Func
 	keydownListener   js.Func
@@ -32,8 +32,12 @@ func (e *Elem) Clear() {
 	e.children = nil
 }
 
-// AppendElem .
-func (e *Elem) AppendElem(children ...*Elem) *Elem {
+// Render .
+func (e *Elem) Render() *Elem {
+	return e
+}
+
+func (e *Elem) appendElem(children ...*Elem) *Elem {
 	for _, child := range children {
 		e.val.Call("appendChild", child.val)
 		e.children = append(e.children, child)

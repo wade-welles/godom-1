@@ -6,7 +6,7 @@ import (
 
 // WebSocket .
 type WebSocket struct {
-	component *Component
+	component *BaseComponent
 	conn      js.Value
 	open      chan int
 }
